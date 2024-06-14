@@ -1,26 +1,39 @@
-# Definiere den Compiler und die Compiler-Flags
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -Wextra -pedantic -Iinclude
+CXXFLAGS = -Wall -Wextra -std=c++20 -pedantic
+SRC_DIR = src
+INCLUDE_DIR = include
+TEST_DIR = tests
+BUILD_DIR = build
 
-# Definiere die Quell- und Objektdateien
-SRCS = src/main.cpp src/Task.cpp
-OBJS = $(SRCS:.cpp=.o)
-TARGET = project_management
+SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
+OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
-# Standardziel
-all: $(TARGET)
+TEST_FILES = $(wildcard $(TEST_DIR)/*.cpp)
+TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(TEST_FILES))
 
-# Ziel zum Erstellen des ausführbaren Programms
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+EXECUTABLE = project_management_system
+TEST_EXECUTABLE = run_tests
 
-# Musterregel zum Kompilieren der .cpp-Dateien in .o-Dateien
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+.PHONY: all clean test
 
-# Ziel zum Bereinigen des Projekts
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJ_FILES)
+	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ $^
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	@mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ -c $<
+
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(BUILD_DIR) $(EXECUTABLE) $(TEST_EXECUTABLE)
 
-# Füge ein Phony-Ziel hinzu, um Konflikte mit Dateinamen zu vermeiden
-.PHONY: all clean
+test: $(TEST_EXECUTABLE)
+	./$(TEST_EXECUTABLE)
+
+$(TEST_EXECUTABLE): $(OBJ_FILES) $(TEST_OBJ_FILES)
+	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ $^ -lCatch2
+
+$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
+	@mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ -c $<

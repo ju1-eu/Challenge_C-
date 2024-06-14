@@ -1,37 +1,32 @@
 #include "Task.h"
-#include <iostream>
 
-// Konstruktor der Task-Klasse
-Task::Task(const std::string& name, const std::string& description, const std::string& dueDate)
-    : name(name), description(description), dueDate(dueDate) {}
+Task::Task(int id, const std::string &title, const std::string &description) 
+    : id(id), title(title), description(description), completed(false) {}
 
-// Getter-Methoden
-std::string Task::getName() const {
-    return name;
+int Task::getId() const {
+    return id;
+}
+
+std::string Task::getTitle() const {
+    return title;
 }
 
 std::string Task::getDescription() const {
     return description;
 }
 
-std::string Task::getDueDate() const {
-    return dueDate;
+bool Task::isCompleted() const {
+    return completed;
 }
 
-// Setter-Methoden
-void Task::setName(const std::string& name) {
-    this->name = name;
+void Task::setTitle(const std::string &title) {
+    this->title = title;
 }
 
-void Task::setDescription(const std::string& description) {
+void Task::setDescription(const std::string &description) {
     this->description = description;
 }
 
-void Task::setDueDate(const std::string& dueDate) {
-    this->dueDate = dueDate;
-}
-
-// Methode zum Drucken der Aufgabe
-void Task::printTask() const {
-    std::cout << "Aufgabenname: " << name << "\nBeschreibung: " << description << "\nFälligkeitsdatum: " << dueDate << std::endl;
+void Task::setCompleted(bool completed) {
+    this->completed = completed;
 }

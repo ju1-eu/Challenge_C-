@@ -5,7 +5,7 @@
       "name": "(CodeLLDB) Launch",
       "type": "lldb",
       "request": "launch",
-      "program": "${workspaceFolder}/project_management",
+      "program": "${workspaceFolder}/run_tests",
       "args": [],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
