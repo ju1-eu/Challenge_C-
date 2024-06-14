@@ -1,5 +1,4 @@
-*.o
-*.exe
-*.out
-*.log
 build/
+project_management_system
+run_tests
+.vscode/
