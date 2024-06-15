@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++20 -pedantic
+CXXFLAGS = -Wall -Wextra -std=c++20 -pedantic -g
 SRC_DIR = src
 INCLUDE_DIR = include
 TEST_DIR = tests
