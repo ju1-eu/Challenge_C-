@@ -52,7 +52,6 @@ void Milestone::setDescription(const std::string& newDescription) {
     description = newDescription;
 }
 
-// Definition der searchMilestones Methode
 std::vector<Milestone> Milestone::searchMilestones(const std::vector<Milestone>& milestoneList, const std::string& searchTerm) {
     std::vector<Milestone> results;
     std::copy_if(milestoneList.begin(), milestoneList.end(), std::back_inserter(results),
@@ -61,4 +60,36 @@ std::vector<Milestone> Milestone::searchMilestones(const std::vector<Milestone>&
                             milestone.getDescription().find(searchTerm) != std::string::npos;
                  });
     return results;
+}
+
+void Milestone::save(std::ofstream& outFile) const {
+    outFile << id << '\n'
+            << title << '\n'
+            << description << '\n'
+            << tasks.size() << '\n';
+    for (const auto& task : tasks) {
+        task.save(outFile);
+    }
+}
+
+Milestone Milestone::load(std::ifstream& inFile) {
+    int id;
+    std::string title;
+    std::string description;
+    size_t taskCount;
+
+    inFile >> id;
+    inFile.ignore();
+    std::getline(inFile, title);
+    std::getline(inFile, description);
+    inFile >> taskCount;
+    inFile.ignore();
+
+    Milestone milestone(id, title, description);
+    for (size_t i = 0; i < taskCount; ++i) {
+        Task task = Task::load(inFile);
+        milestone.addTask(task);
+    }
+
+    return milestone;
 }

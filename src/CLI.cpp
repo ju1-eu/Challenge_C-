@@ -44,6 +44,10 @@ void removeMilestone(std::vector<Milestone>& milestones, int id) {
 void displayMilestones(const std::vector<Milestone>& milestones, std::ostream& out) {
     for (const auto& milestone : milestones) {
         out << "ID: " << milestone.getId() << ", Title: " << milestone.getTitle() << ", Description: " << milestone.getDescription() << std::endl;
+        out << "Tasks:" << std::endl;
+        for (const auto& task : milestone.getTasks()) {
+            out << "  - " << task.getTitle() << ": " << task.getDescription() << std::endl;
+        }
     }
 }
 

@@ -4,10 +4,11 @@
 #include <string>
 #include <vector>
 #include "Task.h"
+#include <fstream>
 
 class Milestone {
 public:
-    Milestone(int id, const std::string& title, const std::string& description);
+    Milestone(int id = 0, const std::string& title = "", const std::string& description = "");
 
     int getId() const;
     const std::string& getTitle() const;
@@ -19,12 +20,14 @@ public:
     std::vector<Task> getTasks() const;
     void displayMilestone() const;
 
-    // Neue Methoden für setTitle und setDescription
     void setTitle(const std::string& newTitle);
     void setDescription(const std::string& newDescription);
 
-    // Deklaration der searchMilestones Methode
     static std::vector<Milestone> searchMilestones(const std::vector<Milestone>& milestoneList, const std::string& searchTerm);
+
+    // Methoden zur Speicherung und zum Laden
+    void save(std::ofstream& outFile) const;
+    static Milestone load(std::ifstream& inFile);
 
 private:
     int id;

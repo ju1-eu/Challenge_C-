@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <fstream>
 
 enum class Priority {
     LOW,
@@ -21,7 +22,7 @@ private:
     Priority priority;
 
 public:
-    Task(int id, const std::string& title, const std::string& description);
+    Task(int id = 0, const std::string& title = "", const std::string& description = "");
 
     int getId() const;
     const std::string& getTitle() const;
@@ -38,6 +39,10 @@ public:
 
     void editTask(const std::string& newTitle, const std::string& newDescription);
     static std::vector<Task> searchTasks(const std::vector<Task>& taskList, const std::string& searchTerm);
+
+    // Methoden zur Speicherung und zum Laden
+    void save(std::ofstream& outFile) const;
+    static Task load(std::ifstream& inFile);
 };
 
 #endif // TASK_H

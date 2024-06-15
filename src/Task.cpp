@@ -62,3 +62,36 @@ std::vector<Task> Task::searchTasks(const std::vector<Task>& taskList, const std
     }
     return results;
 }
+
+void Task::save(std::ofstream& outFile) const {
+    outFile << id << '\n'
+            << title << '\n'
+            << description << '\n'
+            << completed << '\n'
+            << dueDate << '\n'
+            << static_cast<int>(priority) << '\n';
+}
+
+Task Task::load(std::ifstream& inFile) {
+    int id;
+    std::string title;
+    std::string description;
+    bool completed;
+    std::time_t dueDate;
+    int priorityInt;
+
+    inFile >> id;
+    inFile.ignore();
+    std::getline(inFile, title);
+    std::getline(inFile, description);
+    inFile >> completed;
+    inFile >> dueDate;
+    inFile >> priorityInt;
+
+    Task task(id, title, description);
+    task.setCompleted(completed);
+    task.setDueDate(dueDate);
+    task.setPriority(static_cast<Priority>(priorityInt));
+
+    return task;
+}

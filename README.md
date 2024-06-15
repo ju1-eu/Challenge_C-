@@ -4,50 +4,58 @@
 
 Entwickle ein kleines Projektmanagementsystem in C++, das Aufgaben und Meilensteine verwaltet. Dieses Projekt wird dir helfen, wichtige Programmier- und Projektmanagementfähigkeiten zu erlernen und zu vertiefen.
 
+## Verzeichnisstruktur
 
 ```bash
-# Verzeichnisstruktur
 project-management-system/
 ├── Makefile
 ├── README.md
 ├── build/
+│   ├── CLI.o
 │   ├── Milestone.o
 │   ├── Task.o
 │   ├── main.o
+│   ├── test_CLI.o
 │   ├── test_Milestone.o
 │   ├── test_Task.o
+│   ├── test_main.o
 ├── include/
+│   ├── CLI.h
 │   ├── Milestone.h
 │   ├── Task.h
 │   ├── catch.hpp
 ├── src/
+│   ├── CLI.cpp
 │   ├── Milestone.cpp
 │   ├── Task.cpp
 │   ├── main.cpp
 ├── tests/
+│   ├── test_CLI.cpp
 │   ├── test_Milestone.cpp
 │   ├── test_Task.cpp
+│   ├── test_main.cpp
 ├── project_management_system
 ├── run_tests
 ```
 
 ## Kompilieren und Ausführen
 
+### Terminal
+
 ```bash
-# Terminal
 cd project-management-system
 make clean
 make
 ./project_management_system
 make test
 ./run_tests
-
-# VSCode-Editor
-Ausführen und debuggen (Shift+Command+D)
 ```
 
-## Git - Projekt-Verwaltung
+### VSCode-Editor
 
+Ausführen und debuggen (Shift+Command+D)
+
+## Git - Projekt-Verwaltung
 
 ### Aufräumen
 
@@ -109,13 +117,13 @@ git push --force
 
 3. **Ziel erstellen und Breakpoints setzen**:
    ```sh
-   (lldb) target create "./project_management_system"
-   (lldb) breakpoint set --name main
+   target create "./project_management_system"
+   breakpoint set --name main
    ```
 
 4. **Programm ausführen**:
    ```sh
-   (lldb) run
+   run
    ```
 
    Das Programm wird bis zum `main` Breakpoint ausgeführt und dort gestoppt.
@@ -129,75 +137,75 @@ git push --force
    
    Beispiel:
    ```sh
-   (lldb) next
+   next
    ```
 
 6. **Variablen überprüfen**:
    Verwenden Sie den `print` Befehl, um den Wert von Variablen zu überprüfen.
    ```sh
-   (lldb) print tasks
-   (lldb) print milestones
+   print tasks
+   print milestones
    ```
 
 7. **Quellcode anzeigen**:
    Um den aktuellen Quellcode anzuzeigen:
    ```sh
-   (lldb) source list
+   source list
    ```
 
 ### Debugging-Tipps
 
 - **Setzen Sie Breakpoints strategisch**: Setzen Sie Breakpoints an Stellen, an denen Sie den Programmfluss und die Variablen überprüfen möchten.
   ```sh
-  (lldb) breakpoint set --name addTask
+  breakpoint set --name addTask
   ```
 
 - **Verwenden Sie `next` und `step` sinnvoll**: Verwenden Sie `next`, um die nächste Zeile auszuführen, und `step`, um in Funktionen einzutreten.
   ```sh
-  (lldb) next
-  (lldb) step
+  next
+  step
   ```
-  
+
 ### Beispiel-Debugging-Sitzung
 
 1. **Programm starten und bis zum `main` Breakpoint laufen lassen**:
    ```sh
    lldb ./project_management_system
-   (lldb) target create "./project_management_system"
-   (lldb) breakpoint set --name main
-   (lldb) run
+   target create "./project_management_system"
+   breakpoint set --name main
+   run
    ```
 
 2. **Schrittweise durch den Code gehen und Variablen überprüfen**:
    ```sh
-   (lldb) next
-   (lldb) print tasks
-   (lldb) next
-   (lldb) print milestones
-   (lldb) step
-   (lldb) print newTask
-   (lldb) finish
-   (lldb) print tasks
+   next
+   print tasks
+   next
+   print milestones
+   step
+   print newTask
+   finish
+   print tasks
    ```
 
 3. **Untersuchung und Analyse**:
    - Setzen Sie einen Breakpoint bei der `addTask` Funktion, um den Inhalt des `Task` Objekts zu überprüfen:
      ```sh
-     (lldb) breakpoint set --name addTask
-     (lldb) continue
-     (lldb) print newTask
+     breakpoint set --name addTask
+     continue
+     print newTask
      ```
 
    - Durchlaufen Sie den Code Zeile für Zeile, um zu sehen, wie Variablen und Objekte sich ändern:
      ```sh
-     (lldb) next
-     (lldb) print tasks
-     (lldb) step
-     (lldb) finish
+     next
+     print tasks
+     step
+     finish
      ```
 
    - Überprüfen Sie die Inhalte der `tasks` und `milestones` Vektoren zu verschiedenen Zeitpunkten im Programm:
      ```sh
-     (lldb) print tasks
-     (lldb) print milestones
+     print tasks
+     print milestones
      ```

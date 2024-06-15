@@ -5,35 +5,40 @@ INCLUDE_DIR = include
 TEST_DIR = tests
 BUILD_DIR = build
 
-SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) $(SRC_DIR)/CLI.cpp
+SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
+SRC_OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(filter-out $(SRC_DIR)/main.cpp, $(SRC_FILES)))
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
 TEST_FILES = $(wildcard $(TEST_DIR)/*.cpp)
-TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(TEST_FILES))
+TEST_OBJ_FILES = $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(filter-out $(TEST_DIR)/test_main.cpp, $(TEST_FILES)))
 
 EXECUTABLE = project_management_system
 TEST_EXECUTABLE = run_tests
 
-.PHONY: all clean test
+.PHONY: all clean build test
 
-all: $(EXECUTABLE)
+all: build
+
+build: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJ_FILES)
+	@echo "Linking $(EXECUTABLE)"
 	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ $^
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(BUILD_DIR)
+	@echo "Compiling $<"
+	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ -c $<
+
+$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
+	@mkdir -p $(BUILD_DIR)
+	@echo "Compiling $<"
 	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ -c $<
 
 clean:
 	rm -rf $(BUILD_DIR) $(EXECUTABLE) $(TEST_EXECUTABLE)
 
-test: $(TEST_EXECUTABLE)
+test: $(BUILD_DIR)/test_main.o $(TEST_OBJ_FILES) $(SRC_OBJ_FILES)
+	@echo "Linking $(TEST_EXECUTABLE)"
+	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $(TEST_EXECUTABLE) $^ -lCatch2
 	./$(TEST_EXECUTABLE)
-
-$(TEST_EXECUTABLE): $(OBJ_FILES) $(TEST_OBJ_FILES)
-	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ $^ -lCatch2
-
-$(BUILD_DIR)/%.o: $(TEST_DIR)/%.cpp
-	@mkdir -p $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) -I $(INCLUDE_DIR) -o $@ -c $<

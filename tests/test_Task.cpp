@@ -1,6 +1,8 @@
-#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Task.h"
+#include <fstream>
+#include <ctime>
+#include <vector>
 
 TEST_CASE("Task functionalities", "[Task]") {
     Task task(1, "Task 1", "Description 1");
@@ -29,5 +31,34 @@ TEST_CASE("Task functionalities", "[Task]") {
     SECTION("Setting and getting priority") {
         task.setPriority(Priority::MEDIUM);
         REQUIRE(task.getPriority() == Priority::MEDIUM);
+    }
+
+    SECTION("Saving and loading a task") {
+        std::ofstream outFile("task_test.txt");
+        task.save(outFile);
+        outFile.close();
+
+        std::ifstream inFile("task_test.txt");
+        Task loadedTask = Task::load(inFile);
+        inFile.close();
+
+        REQUIRE(loadedTask.getId() == task.getId());
+        REQUIRE(loadedTask.getTitle() == task.getTitle());
+        REQUIRE(loadedTask.getDescription() == task.getDescription());
+        REQUIRE(loadedTask.isCompleted() == task.isCompleted());
+        REQUIRE(loadedTask.getDueDate() == task.getDueDate());
+        REQUIRE(loadedTask.getPriority() == task.getPriority());
+    }
+
+    SECTION("Searching tasks") {
+        std::vector<Task> tasks = {
+            Task(1, "Task 1", "Description 1"),
+            Task(2, "Task 2", "Description 2"),
+            Task(3, "Special Task", "Special Description")
+        };
+
+        auto results = Task::searchTasks(tasks, "Special");
+        REQUIRE(results.size() == 1);
+        REQUIRE(results[0].getTitle() == "Special Task");
     }
 }

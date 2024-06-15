@@ -51,6 +51,9 @@ void displayTasks(const std::vector<Task>& tasks) {
         std::cout << "Titel: " << task.getTitle() << std::endl;
         std::cout << "Beschreibung: " << task.getDescription() << std::endl;
         std::cout << "Erledigt: " << (task.isCompleted() ? "Ja" : "Nein") << std::endl;
+        std::time_t dueDate = task.getDueDate();
+        std::cout << "Fälligkeitsdatum: " << std::ctime(&dueDate);
+        std::cout << "Priorität: " << static_cast<int>(task.getPriority()) << std::endl;
         std::cout << std::endl;
     }
 }
