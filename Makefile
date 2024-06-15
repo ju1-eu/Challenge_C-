@@ -5,7 +5,7 @@ INCLUDE_DIR = include
 TEST_DIR = tests
 BUILD_DIR = build
 
-SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
+SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp) $(SRC_DIR)/CLI.cpp
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
 TEST_FILES = $(wildcard $(TEST_DIR)/*.cpp)

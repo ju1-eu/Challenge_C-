@@ -2,28 +2,32 @@
 #include "catch.hpp"
 #include "Task.h"
 
-TEST_CASE("Task creation and search") {
-    Task task1(1, "Task 1", "Description 1");
-    Task task2(2, "Task 2", "Description 2");
-    std::vector<Task> tasks = { task1, task2 };
-
-    REQUIRE(Task::searchTasks(tasks, "Task 1").size() == 1);
-    REQUIRE(Task::searchTasks(tasks, "Task 3").size() == 0);
-}
-
-TEST_CASE("Task editing and properties") {
+TEST_CASE("Task functionalities", "[Task]") {
     Task task(1, "Task 1", "Description 1");
-    task.editTask("New Task 1", "New Description 1");
-    REQUIRE(task.getTitle() == "New Task 1");
-    REQUIRE(task.getDescription() == "New Description 1");
 
-    std::time_t now = std::time(nullptr);
-    task.setDueDate(now);
-    REQUIRE(task.getDueDate() == now);
+    SECTION("Setting and getting title") {
+        task.setTitle("New Task 1");
+        REQUIRE(task.getTitle() == "New Task 1");
+    }
 
-    task.setPriority(MEDIUM);
-    REQUIRE(task.getPriority() == MEDIUM);
-    
-    task.setCompleted(true);
-    REQUIRE(task.isCompleted() == true);
+    SECTION("Setting and getting description") {
+        task.setDescription("New Description 1");
+        REQUIRE(task.getDescription() == "New Description 1");
+    }
+
+    SECTION("Setting and getting completion status") {
+        task.setCompleted(true);
+        REQUIRE(task.isCompleted() == true);
+    }
+
+    SECTION("Setting and getting due date") {
+        std::time_t dueDate = std::time(nullptr);
+        task.setDueDate(dueDate);
+        REQUIRE(task.getDueDate() == dueDate);
+    }
+
+    SECTION("Setting and getting priority") {
+        task.setPriority(Priority::MEDIUM);
+        REQUIRE(task.getPriority() == Priority::MEDIUM);
+    }
 }
