@@ -1,24 +1,28 @@
+#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Milestone.h"
-#include "Task.h"
-#include <sstream>
-#include <iostream>
 
-// Testfall für die Meilenstein-Operationen
-TEST_CASE("Meilenstein Operationen", "[milestone]") {
-    Milestone milestone(1, "Test Meilenstein", "Testen der Meilensteinoperationen");
+TEST_CASE("Milestone creation and search") {
+    Milestone milestone1(1, "Milestone 1", "Description 1");
+    Milestone milestone2(2, "Milestone 2", "Description 2");
+    std::vector<Milestone> milestones = { milestone1, milestone2 };
 
-    REQUIRE(milestone.getId() == 1);
-    REQUIRE(milestone.getTitle() == "Test Meilenstein");
-    REQUIRE(milestone.getDescription() == "Testen der Meilensteinoperationen");
+    REQUIRE(Milestone::searchMilestones(milestones, "Milestone 1").size() == 1);
+    REQUIRE(Milestone::searchMilestones(milestones, "Milestone 3").size() == 0);
+}
 
-    Task task(1, "Test Aufgabe", "Testen der Aufgabenoperationen");
-    milestone.addTask(task);
+TEST_CASE("Milestone editing and task management") {
+    Milestone milestone(1, "Milestone 1", "Description 1");
+    milestone.editMilestone("New Milestone 1", "New Description 1");
+    REQUIRE(milestone.getTitle() == "New Milestone 1");
+    REQUIRE(milestone.getDescription() == "New Description 1");
 
-    std::stringstream buffer;
-    std::streambuf * old = std::cout.rdbuf(buffer.rdbuf());
-    milestone.displayTasks();
-    std::cout.rdbuf(old);
+    Task task1(1, "Task 1", "Description 1");
+    Task task2(2, "Task 2", "Description 2");
+    milestone.addTask(task1);
+    milestone.addTask(task2);
+    REQUIRE(milestone.tasks.size() == 2);
 
-    REQUIRE(buffer.str() == "Aufgaben-ID: 1, Titel: Test Aufgabe, Beschreibung: Testen der Aufgabenoperationen\n");
+    milestone.removeTask(1);
+    REQUIRE(milestone.tasks.size() == 1);
 }

@@ -67,10 +67,18 @@ make clean
 ```bash
 # Änderungen zum Commit vormerken
 git add .
+
 # Änderungen committen
 git commit -m "Tag 3: "
+
 # Änderungen pushen
 git push origin main
+
+# Tag hinzufügen
+git tag -a v1.0 -m "Tag 3: Meilensteine hinzufügen"
+
+# Tag pushen
+git push origin v1.0
 ```
 
 ### Commit-Nachrichten ändern

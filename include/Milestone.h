@@ -3,25 +3,30 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Task.h"
 
-// Klasse zur Darstellung eines Meilensteins
 class Milestone {
 private:
     int id;
     std::string title;
     std::string description;
-    std::vector<Task> tasks;
 
 public:
-    Milestone(int id, const std::string& title, const std::string& description);
+    std::vector<Task> tasks;
+
+    Milestone(int id, const std::string& t, const std::string& d);
+
     int getId() const;
     std::string getTitle() const;
     std::string getDescription() const;
+
     void addTask(const Task& task);
     void removeTask(int taskId);
-    void displayTasks() const;
+    void editMilestone(const std::string& newTitle, const std::string& newDescription);
     void displayMilestone() const;
+
+    static std::vector<Milestone> searchMilestones(const std::vector<Milestone>& milestoneList, const std::string& searchTerm);
 };
 
 #endif // MILESTONE_H
