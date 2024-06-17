@@ -1,5 +1,4 @@
 #include "Task.h"
-#include <vector> // Fügen Sie diese Zeile hinzu
 
 Task::Task(int id, const std::string& title, const std::string& description)
     : id(id), title(title), description(description), completed(false), dueDate(0), priority(Priority::LOW) {}

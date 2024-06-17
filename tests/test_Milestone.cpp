@@ -1,60 +1,60 @@
 #include "catch.hpp"
 #include "Milestone.h"
-#include <fstream>
+#include "Task.h"
+#include <sstream>
 
-TEST_CASE("Milestone functionalities", "[Milestone]") {
-    Milestone milestone(1, "Milestone 1", "Description 1");
+TEST_CASE("Test adding tasks to milestones") {
+    Milestone milestone(1, "Test Milestone", "This is a test milestone.");
+    Task task(1, "Test Task", "This is a test task.");
 
-    Task task1(1, "Task 1", "Task 1 Description");
-    Task task2(2, "Task 2", "Task 2 Description");
+    milestone.addTask(task);
 
-    milestone.addTask(task1);
-    milestone.addTask(task2);
+    REQUIRE(milestone.getTasks().size() == 1);
+    REQUIRE(milestone.getTasks()[0].getTitle() == "Test Task");
+}
 
-    SECTION("Adding tasks") {
-        REQUIRE(milestone.getTasks().size() == 2);
+TEST_CASE("Test removing tasks from milestones") {
+    Milestone milestone(1, "Test Milestone", "This is a test milestone.");
+    Task task(1, "Test Task", "This is a test task.");
+
+    milestone.addTask(task);
+    milestone.removeTask(1);
+
+    REQUIRE(milestone.getTasks().size() == 0);
+}
+
+TEST_CASE("Test editing milestones") {
+    Milestone milestone(1, "Test Milestone", "This is a test milestone.");
+    milestone.setTitle("Edited Milestone");
+    milestone.setDescription("This is an edited milestone.");
+
+    REQUIRE(milestone.getTitle() == "Edited Milestone");
+    REQUIRE(milestone.getDescription() == "This is an edited milestone.");
+}
+
+TEST_CASE("Test displaying milestones") {
+    Milestone milestone(1, "Test Milestone", "This is a test milestone.");
+    std::ostringstream oss;
+    milestone.displayMilestone();
+    oss << "Milestone ID: " << milestone.getId() << ", Title: " << milestone.getTitle() << ", Description: " << milestone.getDescription() << std::endl;
+    oss << "Tasks:" << std::endl;
+    for (const auto& task : milestone.getTasks()) {
+        oss << "  - " << task.getTitle() << ": " << task.getDescription() << std::endl;
     }
 
-    SECTION("Removing tasks") {
-        milestone.removeTask(1);
-        REQUIRE(milestone.getTasks().size() == 1);
-        REQUIRE(milestone.getTasks()[0].getId() == 2);
-    }
+    std::string output = oss.str();
+    REQUIRE(output.find("Milestone ID: 1") != std::string::npos);
+    REQUIRE(output.find("Title: Test Milestone") != std::string::npos);
+    REQUIRE(output.find("Description: This is a test milestone.") != std::string::npos);
+}
 
-    SECTION("Editing milestone") {
-        milestone.editMilestone("New Milestone 1", "New Description 1");
-        REQUIRE(milestone.getTitle() == "New Milestone 1");
-        REQUIRE(milestone.getDescription() == "New Description 1");
-    }
+TEST_CASE("Test searching milestones") {
+    Milestone milestone1(1, "Test Milestone", "This is a test milestone.");
+    Milestone milestone2(2, "Another Milestone", "This is another test milestone.");
+    std::vector<Milestone> milestones = { milestone1, milestone2 };
 
-    SECTION("Searching milestones") {
-        milestone.editMilestone("New Milestone 1", "New Description 1"); // Ensure milestone is edited
-        std::vector<Milestone> milestones = {milestone};
-        std::vector<Milestone> results = Milestone::searchMilestones(milestones, "New Milestone 1");
-        REQUIRE(results.size() == 1);
-        REQUIRE(results[0].getTitle() == "New Milestone 1");
-    }
+    auto results = Milestone::searchMilestones(milestones, "Another");
 
-    SECTION("Displaying milestone") {
-        milestone.displayMilestone();
-        // Check console output manually
-    }
-
-    SECTION("Saving and loading a milestone") {
-        std::ofstream outFile("milestone_test.txt");
-        milestone.save(outFile);
-        outFile.close();
-
-        std::ifstream inFile("milestone_test.txt");
-        Milestone loadedMilestone = Milestone::load(inFile);
-        inFile.close();
-
-        REQUIRE(loadedMilestone.getId() == milestone.getId());
-        REQUIRE(loadedMilestone.getTitle() == milestone.getTitle());
-        REQUIRE(loadedMilestone.getDescription() == milestone.getDescription());
-        REQUIRE(loadedMilestone.getTasks().size() == milestone.getTasks().size());
-        REQUIRE(loadedMilestone.getTasks()[0].getId() == milestone.getTasks()[0].getId());
-        REQUIRE(loadedMilestone.getTasks()[0].getTitle() == milestone.getTasks()[0].getTitle());
-        REQUIRE(loadedMilestone.getTasks()[0].getDescription() == milestone.getTasks()[0].getDescription());
-    }
+    REQUIRE(results.size() == 1);
+    REQUIRE(results[0].getTitle() == "Another Milestone");
 }

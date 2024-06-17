@@ -1,6 +1,14 @@
+TASKS
 1
-Task 1
-Description 1
-0
-0
-0
+Titel: Projektplanung
+Beschreibung: Erstellung eines detaillierten Projektplans
+Erledigt: Ja
+Fälligkeitsdatum: Nicht gesetzt
+Priorität: LOW
+
+2
+Titel: Team Meeting
+Beschreibung: Wöchentliches Team-Meeting zur Fortschrittsbesprechung
+Erledigt: Nein
+Fälligkeitsdatum: 2024-06-20
+Priorität: HIGH

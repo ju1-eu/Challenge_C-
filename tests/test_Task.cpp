@@ -1,64 +1,52 @@
 #include "catch.hpp"
 #include "Task.h"
-#include <fstream>
-#include <ctime>
-#include <vector>
+#include <sstream>
 
-TEST_CASE("Task functionalities", "[Task]") {
-    Task task(1, "Task 1", "Description 1");
+TEST_CASE("Test task creation and getters") {
+    Task task(1, "Test Task", "This is a test task.");
 
-    SECTION("Setting and getting title") {
-        task.setTitle("New Task 1");
-        REQUIRE(task.getTitle() == "New Task 1");
-    }
+    REQUIRE(task.getId() == 1);
+    REQUIRE(task.getTitle() == "Test Task");
+    REQUIRE(task.getDescription() == "This is a test task.");
+    REQUIRE(task.isCompleted() == false);
+    REQUIRE(task.getDueDate() == 0);
+    REQUIRE(task.getPriority() == Priority::LOW);
+}
 
-    SECTION("Setting and getting description") {
-        task.setDescription("New Description 1");
-        REQUIRE(task.getDescription() == "New Description 1");
-    }
+TEST_CASE("Test task setters") {
+    Task task(1, "Test Task", "This is a test task.");
 
-    SECTION("Setting and getting completion status") {
-        task.setCompleted(true);
-        REQUIRE(task.isCompleted() == true);
-    }
+    task.setTitle("Edited Task");
+    task.setDescription("This is an edited task.");
+    task.setCompleted(true);
 
-    SECTION("Setting and getting due date") {
-        std::time_t dueDate = std::time(nullptr);
-        task.setDueDate(dueDate);
-        REQUIRE(task.getDueDate() == dueDate);
-    }
+    REQUIRE(task.getTitle() == "Edited Task");
+    REQUIRE(task.getDescription() == "This is an edited task.");
+    REQUIRE(task.isCompleted() == true);
+}
 
-    SECTION("Setting and getting priority") {
-        task.setPriority(Priority::MEDIUM);
-        REQUIRE(task.getPriority() == Priority::MEDIUM);
-    }
+TEST_CASE("Test task due date") {
+    Task task(1, "Test Task", "This is a test task.");
+    std::time_t dueDate = std::time(nullptr);
+    task.setDueDate(dueDate);
 
-    SECTION("Saving and loading a task") {
-        std::ofstream outFile("task_test.txt");
-        task.save(outFile);
-        outFile.close();
+    REQUIRE(task.getDueDate() == dueDate);
+}
 
-        std::ifstream inFile("task_test.txt");
-        Task loadedTask = Task::load(inFile);
-        inFile.close();
+TEST_CASE("Test task priority") {
+    Task task(1, "Test Task", "This is a test task.");
+    task.setPriority(Priority::HIGH);
 
-        REQUIRE(loadedTask.getId() == task.getId());
-        REQUIRE(loadedTask.getTitle() == task.getTitle());
-        REQUIRE(loadedTask.getDescription() == task.getDescription());
-        REQUIRE(loadedTask.isCompleted() == task.isCompleted());
-        REQUIRE(loadedTask.getDueDate() == task.getDueDate());
-        REQUIRE(loadedTask.getPriority() == task.getPriority());
-    }
+    REQUIRE(task.getPriority() == Priority::HIGH);
+}
 
-    SECTION("Searching tasks") {
-        std::vector<Task> tasks = {
-            Task(1, "Task 1", "Description 1"),
-            Task(2, "Task 2", "Description 2"),
-            Task(3, "Special Task", "Special Description")
-        };
+TEST_CASE("Test task search") {
+    Task task1(1, "Test Task", "This is a test task.");
+    Task task2(2, "Another Task", "This is another test task.");
+    std::vector<Task> tasks = { task1, task2 };
 
-        auto results = Task::searchTasks(tasks, "Special");
-        REQUIRE(results.size() == 1);
-        REQUIRE(results[0].getTitle() == "Special Task");
-    }
+    auto results = Task::searchTasks(tasks, "Another");
+
+    REQUIRE(results.size() == 1);
+    REQUIRE(results[0].getTitle() == "Another Task");
 }

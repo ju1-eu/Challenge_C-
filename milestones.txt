@@ -1,0 +1,13 @@
+MILESTONES
+1
+Titel: Projektstart
+Beschreibung: Beginn des Projekts und Einrichtung des Teams
+Tasks:
+  - 1: Projektplanung: Erstellung eines detaillierten Projektplans
+
+2
+Titel: Meilenstein 1 abgeschlossen
+Beschreibung: Abschluss des ersten Meilensteins mit allen dazugehörigen Aufgaben
+Tasks:
+  - 2: Team Meeting: Wöchentliches Team-Meeting zur Fortschrittsbesprechung
+
